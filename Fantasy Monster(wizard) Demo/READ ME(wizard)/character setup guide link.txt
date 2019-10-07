@@ -1,0 +1,70 @@
+
+ guide video 
+
+
+ youtube link :   https://youtu.be/f3fezlfxWsI
+
+
+
+
+
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerAttack : MonoBehaviour
+{
+    public Rigidbody projectile;
+    public Transform Spawnpoint;
+    
+
+    public GameObject player;
+    bool fireNow = false;
+    float coolDown = 2;
+    static float monsterHealth;
+
+    public static void updateMonsterHealth(float health)
+    {
+        monsterHealth = health;
+        
+    }
+        void Update()
+    {
+        coolDown -= Time.deltaTime;
+        if (fireNow && coolDown <= 0)
+        {
+            Shoot();
+            coolDown = 2;
+        }
+        if (monsterHealth < 100)
+        {
+            fireNow = true;
+        }
+    }
+        void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            fireNow = true;
+            print("med player tag");
+        }
+
+        print("uden player tag");
+
+    }
+
+    void Shoot()
+    {
+        Rigidbody clone;
+        clone = (Rigidbody)Instantiate(projectile, Spawnpoint.position, projectile.rotation);
+
+        Vector3 shoot = (player.transform.position - clone.position).normalized;
+        clone.AddForce(shoot * 500.0f);
+
+        print("shoot");
+    }
+
+}
+
